@@ -6,7 +6,7 @@ import Button from '../Button';
 import Form from '../Form';
 import Input from '../Input';
 
-import { fetchToken } from '../../redux/actions';
+import { fetchToken, login } from '../../redux/actions';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -77,11 +77,12 @@ class LoginForm extends Component {
   doLogin = async (event) => {
     event.preventDefault();
     const { username, email } = this.state;
-    const { history, fetchToken: fetchTokenAction } = this.props;
+    const { history, fetchToken: fetchTokenAction, login: loginAction } = this.props;
 
     localStorage.setItem('user',
       JSON.stringify({ username, email }));
 
+    loginAction({ name: username, gravatarEmail: email });
     await fetchTokenAction();
     history.push('/game');
   };
@@ -127,6 +128,7 @@ class LoginForm extends Component {
 
 LoginForm.propTypes = {
   fetchToken: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
@@ -134,6 +136,7 @@ LoginForm.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchToken: () => dispatch(fetchToken()),
+  login: (userData) => dispatch(login(userData)),
 });
 
 export default connect(null, mapDispatchToProps)(LoginForm);
