@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import Button from '../Button';
 import Form from '../Form';
 import Input from '../Input';
+
+import { fetchToken } from '../../redux/actions';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -69,6 +74,18 @@ class LoginForm extends Component {
     });
   };
 
+  doLogin = async (event) => {
+    event.preventDefault();
+    const { username, email } = this.state;
+    const { history, fetchToken: fetchTokenAction } = this.props;
+
+    localStorage.setItem('user',
+      JSON.stringify({ username, email }));
+
+    await fetchTokenAction();
+    history.push('/game');
+  };
+
   render() {
     const { username, email, isDisabled, emailError, usernameError } = this.state;
 
@@ -96,10 +113,27 @@ class LoginForm extends Component {
           testId="input-gravatar-email"
         />
         {emailError && <p>Email Inválido</p>}
-        <Button name="Play" testId="btn-play" isDisabled={ isDisabled } />
+        <Button
+          name="Play"
+          testId="btn-play"
+          type="submit"
+          isDisabled={ isDisabled }
+          onClick={ this.doLogin }
+        />
       </Form>
     );
   }
 }
 
-export default LoginForm;
+LoginForm.propTypes = {
+  fetchToken: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchToken: () => dispatch(fetchToken()),
+});
+
+export default connect(null, mapDispatchToProps)(LoginForm);
