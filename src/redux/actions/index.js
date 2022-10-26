@@ -27,5 +27,4 @@ export const login = (userData) => ({
   type: LOGIN,
   name: userData.name,
   gravatarEmail: userData.gravatarEmail,
-  token: userData.token,
 });
