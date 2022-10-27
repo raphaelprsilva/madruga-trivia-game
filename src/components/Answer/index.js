@@ -28,7 +28,7 @@ class Answer extends Component {
       <div key={ question.question }>
         {questionCategoryAndDifficulty}
         {questionText}
-        <div data-testid="answer-options">
+        <div data-testid="answer-options" data-difficulty={ question.difficulty }>
           {answers.map((answer, index) => {
             const correctAnswer = question.correct_answer === answer;
             const questionStyle = correctAnswer ? greenBorder : redBorder;

@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import Layout from '../../components/Layout';
 import Answer from '../../components/Answer';
 import { getQuestionsFromAPI } from '../../services/API';
+import { updateScore } from '../../redux/actions';
+
+const difficulty = {
+  easy: 1,
+  medium: 2,
+  hard: 3,
+};
+const SCORE_CONSTANT = 10;
 
 class Game extends Component {
   constructor(props) {
@@ -39,9 +49,25 @@ class Game extends Component {
     this.setState({ questions });
   };
 
+  updateUserScore = (questionDifficulty) => {
+    const { questionTimer: currentTimer } = this.state;
+    const { score, assertions, updateScore: updateScoreAction } = this.props;
+    const currentQuestionScore = SCORE_CONSTANT
+      + (currentTimer + difficulty[questionDifficulty]);
+    const userScore = score + currentQuestionScore;
+    const userAssertions = assertions + 1;
+
+    updateScoreAction(userScore, userAssertions);
+  }
+
   handleClick = (event) => {
     const answerTestId = event.target.dataset.testid;
-    if (answerTestId === 'correct-answer') {
+    const questionDifficulty = event.target.parentNode.dataset.difficulty;
+    const isAnswerCorrect = answerTestId === 'correct-answer';
+
+    if (isAnswerCorrect) {
+      this.updateUserScore(questionDifficulty);
+
       this.setState({
         isAnswerCorrect: true,
         isButtonsDisabled: true,
@@ -115,4 +141,19 @@ class Game extends Component {
   }
 }
 
-export default Game;
+Game.propTypes = {
+  assertions: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
+  updateScore: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  assertions: state.player.assertions,
+  score: state.player.score,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateScore: (score, assertions) => dispatch(updateScore(score, assertions)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

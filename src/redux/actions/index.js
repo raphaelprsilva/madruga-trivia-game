@@ -3,6 +3,7 @@ import getTokenFromAPI from '../../services/API';
 export const REQUEST_TOKEN_SUCCESS = 'REQUEST_TOKEN_SUCCESS';
 export const REQUEST_TOKEN_FAILURE = 'REQUEST_TOKEN_FAILURE';
 export const LOGIN = 'LOGIN';
+export const UPDATE_SCORE = 'UPDATE_SCORE';
 
 export const requestTokenSuccess = (token) => ({
   type: REQUEST_TOKEN_SUCCESS,
@@ -28,4 +29,10 @@ export const login = (userData) => ({
   type: LOGIN,
   name: userData.name,
   gravatarEmail: userData.gravatarEmail,
+});
+
+export const updateScore = (score, assertions) => ({
+  type: UPDATE_SCORE,
+  score,
+  assertions,
 });
