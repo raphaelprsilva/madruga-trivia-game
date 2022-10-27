@@ -7,6 +7,7 @@ import Form from '../Form';
 import Input from '../Input';
 
 import { fetchToken, login, fetchQuestions } from '../../redux/actions';
+import { setItemToLocalStorage } from '../../utils/localStorage';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -83,10 +84,11 @@ class LoginForm extends Component {
       login: loginAction,
       fetchQuestions: fetchQuestionsAction,
     } = this.props;
+    const userData = { name: username, gravatarEmail: email };
 
-    localStorage.setItem('user', JSON.stringify({ username, email }));
+    setItemToLocalStorage('user', userData);
+    loginAction(userData);
 
-    loginAction({ name: username, gravatarEmail: email });
     await fetchTokenAction();
     await fetchQuestionsAction();
     history.push('/game');
