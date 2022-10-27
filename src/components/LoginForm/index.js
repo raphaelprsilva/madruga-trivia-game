@@ -6,7 +6,7 @@ import Button from '../Button';
 import Form from '../Form';
 import Input from '../Input';
 
-import { fetchToken, login } from '../../redux/actions';
+import { fetchToken, login, fetchQuestions } from '../../redux/actions';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -77,66 +77,81 @@ class LoginForm extends Component {
   doLogin = async (event) => {
     event.preventDefault();
     const { username, email } = this.state;
-    const { history, fetchToken: fetchTokenAction, login: loginAction } = this.props;
+    const {
+      history,
+      fetchToken: fetchTokenAction,
+      login: loginAction,
+      fetchQuestions: fetchQuestionsAction,
+    } = this.props;
 
-    localStorage.setItem('user',
-      JSON.stringify({ username, email }));
+    localStorage.setItem('user', JSON.stringify({ username, email }));
 
     loginAction({ name: username, gravatarEmail: email });
     await fetchTokenAction();
+    await fetchQuestionsAction();
     history.push('/game');
   };
 
   render() {
+    const { isFetching } = this.props;
     const { username, email, isDisabled, emailError, usernameError } = this.state;
 
     return (
-      <Form>
-        <Input
-          type="text"
-          name="username"
-          label="Usuário"
-          placeholder="Seu nome aqui"
-          value={ username }
-          onChange={ this.handleChange }
-          testId="input-player-name"
-        />
-        {usernameError && (
-          <p>O nome do usuário deve ter pelo menos 5 caracteres</p>
-        )}
-        <Input
-          type="email"
-          name="email"
-          label="Email"
-          placeholder="Seu email aqui"
-          value={ email }
-          onChange={ this.handleChange }
-          testId="input-gravatar-email"
-        />
-        {emailError && <p>Email Inválido</p>}
-        <Button
-          name="Play"
-          testId="btn-play"
-          type="submit"
-          isDisabled={ isDisabled }
-          onClick={ this.doLogin }
-        />
-      </Form>
+      !isFetching ? (
+        <Form>
+          <Input
+            type="text"
+            name="username"
+            label="Usuário"
+            placeholder="Seu nome aqui"
+            value={ username }
+            onChange={ this.handleChange }
+            testId="input-player-name"
+          />
+          {usernameError && (
+            <p>O nome do usuário deve ter pelo menos 5 caracteres</p>
+          )}
+          <Input
+            type="email"
+            name="email"
+            label="Email"
+            placeholder="Seu email aqui"
+            value={ email }
+            onChange={ this.handleChange }
+            testId="input-gravatar-email"
+          />
+          {emailError && <p>Email Inválido</p>}
+          <Button
+            name="Play"
+            testId="btn-play"
+            type="submit"
+            isDisabled={ isDisabled }
+            onClick={ this.doLogin }
+          />
+        </Form>
+      ) : <p>Loading...</p>
     );
   }
 }
 
 LoginForm.propTypes = {
   fetchToken: PropTypes.func.isRequired,
+  fetchQuestions: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   login: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
 
+const mapStateToProps = (state) => ({
+  isFetching: state.questionsData.isFetching,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   fetchToken: () => dispatch(fetchToken()),
   login: (userData) => dispatch(login(userData)),
+  fetchQuestions: () => dispatch(fetchQuestions()),
 });
 
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
