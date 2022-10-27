@@ -1,15 +1,8 @@
-const setItemToLocalStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value));
-};
-
-const getItemFromLocalStorage = (key) => {
-  const item = localStorage.getItem(key);
-  return JSON.parse(item);
-};
-
-const removeItemFromLocalStorage = (key) => {
-  localStorage.removeItem(key);
-};
+import {
+  setItemToLocalStorage,
+  getItemFromLocalStorage,
+  removeItemFromLocalStorage,
+} from '../utils/localStorage';
 
 const setURL = (token) => {
   const URL = `https://opentdb.com/api.php?amount=5&token=${token}`;
