@@ -24,6 +24,8 @@ class Game extends Component {
       questionTimer: 30,
       isButtonsDisabled: false,
       questions: [],
+      isNextQuestionRendered: false,
+      currentQuestion: 0,
     };
   }
 
@@ -58,7 +60,7 @@ class Game extends Component {
     const userAssertions = assertions + 1;
 
     updateScoreAction(userScore, userAssertions);
-  }
+  };
 
   handleClick = (event) => {
     const answerTestId = event.target.dataset.testid;
@@ -72,12 +74,14 @@ class Game extends Component {
         isAnswerCorrect: true,
         isButtonsDisabled: true,
         hasUserAnswered: true,
+        isNextQuestionRendered: true,
       });
     } else {
       this.setState({
         isAnswerCorrect: false,
         isButtonsDisabled: true,
         hasUserAnswered: true,
+        isNextQuestionRendered: true,
       });
     }
   };
@@ -92,6 +96,7 @@ class Game extends Component {
         this.setState({
           isAnswerCorrect: false,
           isButtonsDisabled: true,
+          isNextQuestionRendered: true,
         });
       } else {
         this.setState((prevState) => ({
@@ -102,12 +107,12 @@ class Game extends Component {
   };
 
   renderQuestions = () => {
-    const { isAnswerCorrect, isButtonsDisabled } = this.state;
+    const { isAnswerCorrect, isButtonsDisabled, currentQuestion } = this.state;
     const { questions } = this.state;
 
     const questionsToRender = questions
       ? questions
-        .filter((question, index) => index === 0)
+        .filter((question, index) => index === currentQuestion)
         .map((question) => (
           <Answer
             key={ question.question }
@@ -122,8 +127,28 @@ class Game extends Component {
     return questionsToRender;
   };
 
+  handleNextQuestion = () => {
+    const { currentQuestion, questions } = this.state;
+    const isLastQuestion = currentQuestion === questions.length - 1;
+
+    if (isLastQuestion) {
+      const { history } = this.props;
+      history.push('/feedbacks');
+    } else {
+      this.setState((prevState) => ({
+        currentQuestion: prevState.currentQuestion + 1,
+        isAnswerCorrect: null,
+        hasUserAnswered: false,
+        questionTimer: 30,
+        isButtonsDisabled: false,
+        isNextQuestionRendered: false,
+      }));
+      this.setQuestionTimer();
+    }
+  };
+
   render() {
-    const { questionTimer } = this.state;
+    const { questionTimer, isNextQuestionRendered } = this.state;
     const questionsToRender = this.renderQuestions();
 
     return (
@@ -135,6 +160,15 @@ class Game extends Component {
             <p>{questionTimer}</p>
           </div>
           <div>{questionsToRender}</div>
+          {isNextQuestionRendered ? (
+            <button
+              type="button"
+              onClick={ this.handleNextQuestion }
+              data-testid="btn-next"
+            >
+              Next
+            </button>
+          ) : null}
         </div>
       </Layout>
     );
@@ -143,6 +177,9 @@ class Game extends Component {
 
 Game.propTypes = {
   assertions: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
   score: PropTypes.number.isRequired,
   updateScore: PropTypes.func.isRequired,
 };
