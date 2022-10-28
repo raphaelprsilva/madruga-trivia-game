@@ -6,6 +6,7 @@ import Layout from '../../components/Layout';
 import Answer from '../../components/Answer';
 import { getQuestionsFromAPI } from '../../services/API';
 import { updateScore } from '../../redux/actions';
+import { getItemFromLocalStorage } from '../../utils/localStorage';
 
 const difficulty = {
   easy: 1,
@@ -40,7 +41,8 @@ class Game extends Component {
   };
 
   getQuestions = async () => {
-    const questionsFromAPI = await getQuestionsFromAPI();
+    const playerSettings = getItemFromLocalStorage('settings');
+    const questionsFromAPI = await getQuestionsFromAPI(playerSettings);
     const questionsResult = questionsFromAPI.results;
     const questions = questionsResult.map((question) => ({
       ...question,

@@ -4,9 +4,12 @@ import {
   removeItemFromLocalStorage,
 } from '../utils/localStorage';
 
-const setURL = (token) => {
-  const URL = `https://opentdb.com/api.php?amount=5&token=${token}`;
-  return URL;
+const setURL = (token, settings) => {
+  if (settings) {
+    const { category, difficulty, type } = settings;
+    return `https://opentdb.com/api.php?amount=5&token=${token}&category=${category}&difficulty=${difficulty}&type=${type}`;
+  }
+  return `https://opentdb.com/api.php?amount=5&token=${token}`;
 };
 
 const getTokenFromAPI = async () => {
@@ -22,10 +25,10 @@ const getTokenFromAPI = async () => {
   }
 };
 
-export const getQuestionsFromAPI = async () => {
+export const getQuestionsFromAPI = async (settings) => {
   try {
     const userToken = getItemFromLocalStorage('token');
-    const url = setURL(userToken);
+    const url = setURL(userToken, settings);
     const questions = await fetch(url);
     const questionsJson = await questions.json();
     const INVALID_RESPONSE_CODE = 3;
