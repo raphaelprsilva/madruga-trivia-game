@@ -8,6 +8,7 @@ import Input from '../Input';
 
 import { fetchToken, login } from '../../redux/actions';
 import { setItemToLocalStorage } from '../../utils/localStorage';
+
 import getGravatarURL from '../../utils/gravatar';
 
 class LoginForm extends Component {
@@ -107,10 +108,9 @@ class LoginForm extends Component {
           value={ username }
           onChange={ this.handleChange }
           testId="input-player-name"
+          error={ usernameError }
+          errorMessage="O nome do usuário deve ter pelo menos 5 caracteres"
         />
-        {usernameError && (
-          <p>O nome do usuário deve ter pelo menos 5 caracteres</p>
-        )}
         <Input
           type="email"
           name="email"
@@ -119,8 +119,9 @@ class LoginForm extends Component {
           value={ email }
           onChange={ this.handleChange }
           testId="input-gravatar-email"
+          error={ emailError }
+          errorMessage="O email deve ser válido"
         />
-        {emailError && <p>Email Inválido</p>}
         <Button
           name="Play"
           testId="btn-play"
