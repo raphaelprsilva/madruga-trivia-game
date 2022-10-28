@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import * as S from './styled';
+
 class Button extends Component {
   render() {
     const { name, type, testId, isDisabled, onClick } = this.props;
     return (
-      <button
+      <S.ButtonWrapper
         type={ type === 'submit' ? 'submit' : 'button' }
         data-testid={ testId }
         disabled={ isDisabled }
         onClick={ onClick }
       >
         {name}
-      </button>
+      </S.ButtonWrapper>
     );
   }
 }
