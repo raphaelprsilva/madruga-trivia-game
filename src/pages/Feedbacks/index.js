@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Layout from '../../components/Layout';
 import Feedback from '../../components/Feedback/index';
+import { getItemFromLocalStorage, setItemToLocalStorage } from '../../utils/localStorage';
 
 const CORRECTS_ANSWERS = 3;
 
@@ -25,6 +26,43 @@ class Feedbacks extends Component {
         />
       );
     }
+  };
+
+  setPlayerDataToRanking = () => {
+    const { assertions, score } = this.props;
+    const playerData = getItemFromLocalStorage('user');
+    const { name, gravatarURL } = playerData;
+    const userDataToRanking = {
+      name,
+      score,
+      picture: gravatarURL,
+      assertions,
+    };
+    const ranking = getItemFromLocalStorage('ranking');
+
+    if (!ranking) {
+      setItemToLocalStorage('ranking', [userDataToRanking]);
+    } else {
+      const userAlreadyExists = ranking.some((user) => user.name === name);
+      if (userAlreadyExists) {
+        const newRanking = ranking.map((user) => {
+          if (user.name === name) {
+            return userDataToRanking;
+          }
+          return user;
+        });
+        setItemToLocalStorage('ranking', newRanking);
+      } else {
+        const rankingUpdated = [...ranking, userDataToRanking];
+        setItemToLocalStorage('ranking', rankingUpdated);
+      }
+    }
+  };
+
+  redirectToRanking = () => {
+    const { history } = this.props;
+    this.setPlayerDataToRanking();
+    history.push('/ranking');
   };
 
   render() {
@@ -56,7 +94,7 @@ class Feedbacks extends Component {
           <button
             type="button"
             data-testid="btn-ranking"
-            onClick={ () => history.push('/ranking') }
+            onClick={ () => this.redirectToRanking() }
           >
             Ranking
           </button>

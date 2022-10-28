@@ -2,13 +2,30 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import getGravatarURL from '../../utils/gravatar';
+import { getItemFromLocalStorage } from '../../utils/localStorage';
 
 class Header extends Component {
-  render() {
-    const { name, gravatarEmail, score } = this.props;
+  constructor(props) {
+    super(props);
 
-    const gravatarURL = getGravatarURL(gravatarEmail);
+    this.state = {
+      username: '',
+      gravatarURL: '',
+    };
+  }
+
+  componentDidMount() {
+    const playerData = getItemFromLocalStorage('user');
+    const { name, gravatarURL } = playerData;
+    this.setState({
+      username: name,
+      gravatarURL,
+    });
+  }
+
+  render() {
+    const { username, gravatarURL } = this.state;
+    const { score } = this.props;
 
     return (
       <header>
@@ -18,7 +35,7 @@ class Header extends Component {
           alt="User Gravatar Profile"
           data-testid="header-profile-picture"
         />
-        <p data-testid="header-player-name">{ name }</p>
+        <p data-testid="header-player-name">{ username }</p>
         <p data-testid="header-score">{ score }</p>
       </header>
     );
@@ -26,8 +43,6 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  gravatarEmail: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
 };
 

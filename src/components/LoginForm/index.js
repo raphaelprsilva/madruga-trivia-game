@@ -8,6 +8,7 @@ import Input from '../Input';
 
 import { fetchToken, login } from '../../redux/actions';
 import { setItemToLocalStorage } from '../../utils/localStorage';
+import getGravatarURL from '../../utils/gravatar';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -84,8 +85,9 @@ class LoginForm extends Component {
       login: loginAction,
     } = this.props;
     const userData = { name: username, gravatarEmail: email };
+    const gravatarURL = getGravatarURL(userData.gravatarEmail);
 
-    setItemToLocalStorage('user', userData);
+    setItemToLocalStorage('user', { ...userData, gravatarURL });
     loginAction(userData);
 
     await fetchTokenAction();
