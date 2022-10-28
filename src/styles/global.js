@@ -86,17 +86,20 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    --scrollBarColor: #888;
-    --backgroundScrollBar: #f1f1f1;
-    --contrast: #b469ff;
-    --borders: #38444d;
-    --texts: #8899a6;
-    --postColor: #fff;
-    --highlight: #9a36ff;
-    --mediumBackground: #192734;
     --background: #16202c;
-    --white: #fff;
+    --backgroundScrollBar: #f1f1f1;
     --black: #222;
+    --borders: #38444d;
+    --borderFocus: #a3a0a0;
+    --contrast: #b469ff;
+    --highlight: #9a36ff;
+    --lightContrast: #cd9ccf;
+    --mediumBackground: #192734;
+    --postColor: #fff;
+    --red: #e3242b;
+    --scrollBarColor: #888;
+    --texts: #8899a6;
+    --white: #fff;
   }
 `;
 
