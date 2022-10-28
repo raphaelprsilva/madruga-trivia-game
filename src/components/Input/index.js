@@ -1,14 +1,26 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import * as S from './styled';
+
 class Input extends Component {
   render() {
-    const { type, name, placeholder, testId, value, onChange, label } = this.props;
+    const {
+      type,
+      name,
+      placeholder,
+      testId,
+      value,
+      onChange,
+      label,
+      error,
+      errorMessage,
+    } = this.props;
 
     return (
-      <div>
+      <S.InputWrapper>
         <label htmlFor={ name }>{label}</label>
-        <input
+        <S.Input
           placeholder={ placeholder }
           type={ type }
           name={ name }
@@ -16,7 +28,8 @@ class Input extends Component {
           data-testid={ testId }
           onChange={ onChange }
         />
-      </div>
+        {error && <S.Span>{errorMessage}</S.Span>}
+      </S.InputWrapper>
     );
   }
 }
@@ -27,13 +40,15 @@ Input.defaultProps = {
 };
 
 Input.propTypes = {
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  testId: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  testId: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.string.isRequired,
 };
 
 export default Input;
