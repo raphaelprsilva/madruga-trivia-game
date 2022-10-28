@@ -11,8 +11,7 @@ export const ImageWrapper = styled.img`
     padding-right: 0;
     padding-bottom: 10px;
     border-right: none;
-    border-bottom: 1px solid var(--borders);
     width: 200px;
-    height: 150px;
+    height: 63px;
   `}
 `;
