@@ -2,7 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import madrugaGameLogo from '../../assets/images/madruga-game-logo.png';
 import { getItemFromLocalStorage } from '../../utils/localStorage';
+
+import * as S from './styled';
 
 class Header extends Component {
   constructor(props) {
@@ -28,16 +31,23 @@ class Header extends Component {
     const { score } = this.props;
 
     return (
-      <header>
-        <h1>Trivia Game</h1>
-        <img
-          src={ gravatarURL }
-          alt="User Gravatar Profile"
-          data-testid="header-profile-picture"
-        />
-        <p data-testid="header-player-name">{ username }</p>
-        <p data-testid="header-score">{ score }</p>
-      </header>
+      <S.HeaderWrapper>
+        <S.LogoImg src={ madrugaGameLogo } alt="Madruga Game Logo" />
+        <S.UserDataWrapper>
+          <S.UserDataWrapperItem>
+            <S.ProfileImg
+              src={ gravatarURL }
+              alt="User Gravatar Profile"
+              data-testid="header-profile-picture"
+            />
+            <span data-testid="header-player-name">{username}</span>
+          </S.UserDataWrapperItem>
+          <S.UserDataWrapperItem>
+            <span>Score:</span>
+            <span data-testid="header-score">{score}</span>
+          </S.UserDataWrapperItem>
+        </S.UserDataWrapper>
+      </S.HeaderWrapper>
     );
   }
 }
