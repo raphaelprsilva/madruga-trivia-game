@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import * as S from './styled';
+
 class Feedback extends Component {
   render() {
     const { message, imageSrc } = this.props;
     return (
       <div>
-        <p data-testid="feedback-text">{message}</p>
+        <S.FeedbackMessage data-testid="feedback-text">{message}</S.FeedbackMessage>
         <img src={ imageSrc } alt={ `${message}` } />
       </div>
     );
