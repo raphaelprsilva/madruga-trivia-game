@@ -4,9 +4,13 @@ import { connect } from 'react-redux';
 
 import Layout from '../../components/Layout';
 import Answer from '../../components/Answer';
+import Button from '../../components/Button';
+
 import { getQuestionsFromAPI } from '../../services/API';
 import { updateScore } from '../../redux/actions';
 import { getItemFromLocalStorage } from '../../utils/localStorage';
+
+import * as S from './styled';
 
 const difficulty = {
   easy: 1,
@@ -155,23 +159,21 @@ class Game extends Component {
 
     return (
       <Layout>
-        <h1>Game</h1>
-        <div>
-          <div>
-            <p>Timer:</p>
-            <p>{questionTimer}</p>
-          </div>
-          <div>{questionsToRender}</div>
+        <S.GameContainer>
+          <S.TimerContainer>
+            <S.TimerElement>Timer</S.TimerElement>
+            <S.TimerCount>{questionTimer}</S.TimerCount>
+          </S.TimerContainer>
+          {questionsToRender}
           {isNextQuestionRendered ? (
-            <button
+            <Button
               type="button"
               onClick={ this.handleNextQuestion }
               data-testid="btn-next"
-            >
-              Next
-            </button>
+              name="Next"
+            />
           ) : null}
-        </div>
+        </S.GameContainer>
       </Layout>
     );
   }
