@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 
 import { getItemFromLocalStorage } from '../../utils/localStorage';
 
+import * as S from './styled';
+import Button from '../../components/Button';
+
 class Ranking extends Component {
   constructor(props) {
     super(props);
@@ -27,29 +30,30 @@ class Ranking extends Component {
     const { ranking } = this.state;
 
     return (
-      <div>
-        <h1 data-testid="ranking-title">Ranking</h1>
-        <section>
-          <div>
-            {ranking.map((player, index) => (
-              <div key={ index }>
-                <img src={ player.picture } alt="User Gravatar Profile" />
-                <div data-testid={ `player-name-${index}` }>{ player.name }</div>
-                <div data-testid={ `player-score-${index}` }>{ player.score }</div>
-              </div>
-            ))}
-          </div>
-        </section>
-        <div>
-          <button
-            type="button"
-            data-testid="btn-go-home"
-            onClick={ () => history.push('/') }
-          >
-            Home
-          </button>
-        </div>
-      </div>
+      <S.RankingContainer>
+        <S.RankingTitle data-testid="ranking-title">Ranking</S.RankingTitle>
+        <Button
+          type="button"
+          data-testid="btn-go-home"
+          onClick={ () => history.push('/') }
+          name="Go Home"
+        />
+        <S.RankingItemsContainer>
+          {ranking.map((player, index) => (
+            <S.RankingItem key={ index }>
+              <img src={ player.picture } alt="User Gravatar Profile" />
+              <S.RankingItemInfo data-testid={ `player-name-${index}` }>
+                <p>player name:</p>
+                <p>{player.name}</p>
+              </S.RankingItemInfo>
+              <S.RankingItemInfo data-testid={ `player-score-${index}` }>
+                <p>player score:</p>
+                <p>{player.score}</p>
+              </S.RankingItemInfo>
+            </S.RankingItem>
+          ))}
+        </S.RankingItemsContainer>
+      </S.RankingContainer>
     );
   }
 }
