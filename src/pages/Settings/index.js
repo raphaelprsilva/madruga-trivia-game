@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Form from '../../components/Form';
+import Select from '../../components/Select';
+import Button from '../../components/Button';
+
 import { categories, types, difficulties } from '../../utils/questionsOptions';
 import { setItemToLocalStorage } from '../../utils/localStorage';
+
+import * as S from './styled';
 
 class Settings extends Component {
   constructor(props) {
@@ -41,56 +47,35 @@ class Settings extends Component {
 
   render() {
     return (
-      <div>
-        <h1 data-testid="settings-title">Settings</h1>
+      <S.SettingsContainer>
+        <S.SettingsTitle data-testid="settings-title">Settings</S.SettingsTitle>
         <div>
-          <form onSubmit={ this.saveOptions }>
-            <label htmlFor="category-input">
-              Categoria:
-              <select
-                name="questionCategory"
-                id="category-input"
-                onChange={ this.handleChange }
-              >
-                {categories.map((category, index) => (
-                  <option key={ index } value={ category.value }>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label htmlFor="difficulty-input">
-              Dificuldade:
-              <select
-                name="questionDifficulty"
-                id="difficulty-input"
-                onChange={ this.handleChange }
-              >
-                {difficulties.map((difficulty, index) => (
-                  <option key={ index } value={ difficulty.value }>
-                    {difficulty.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label htmlFor="type-input">
-              Tipo:
-              <select
-                name="questionType"
-                id="type-input"
-                onChange={ this.handleChange }
-              >
-                {types.map((type, index) => (
-                  <option key={ index } value={ type.value }>
-                    {type.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button type="submit">Save Options</button>
-          </form>
+          <Form onSubmit={ this.saveOptions }>
+            <Select
+              name="questionCategory"
+              id="category-input"
+              label="Category"
+              options={ categories }
+              handleChange={ this.handleChange }
+            />
+            <Select
+              name="questionDifficulty"
+              id="difficulty-input"
+              label="Difficulty"
+              options={ difficulties }
+              handleChange={ this.handleChange }
+            />
+            <Select
+              name="questionType"
+              id="type-input"
+              label="Type"
+              options={ types }
+              handleChange={ this.handleChange }
+            />
+            <Button type="submit" name="Save Options" />
+          </Form>
         </div>
-      </div>
+      </S.SettingsContainer>
     );
   }
 }
