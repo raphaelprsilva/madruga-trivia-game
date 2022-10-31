@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import * as S from './styled';
+
 class Answer extends Component {
   render() {
     const {
@@ -11,24 +13,33 @@ class Answer extends Component {
       handleClick,
     } = this.props;
     const questionCategoryAndDifficulty = (
-      <div>
-        <p data-testid="question-category">{question.category}</p>
-        <p>{question.difficulty}</p>
-      </div>
+      <S.QuestionHeader>
+        <S.QuestionItem>
+          <p>Question Category:</p>
+          <p data-testid="question-category">{question.category}</p>
+        </S.QuestionItem>
+        <S.QuestionItem>
+          <p>Question Difficulty:</p>
+          <p>{question.difficulty}</p>
+        </S.QuestionItem>
+      </S.QuestionHeader>
     );
     const questionText = (
-      <div>
+      <S.Question>
         <p data-testid="question-text">{question.question}</p>
-      </div>
+      </S.Question>
     );
     const greenBorder = '3px solid rgb(6, 240, 15)';
     const redBorder = '3px solid rgb(255, 0, 0)';
 
     return (
-      <div key={ question.question }>
+      <S.TimerContainer key={ question.question }>
         {questionCategoryAndDifficulty}
         {questionText}
-        <div data-testid="answer-options" data-difficulty={ question.difficulty }>
+        <S.AnswerContainer
+          data-testid="answer-options"
+          data-difficulty={ question.difficulty }
+        >
           {answers.map((answer, index) => {
             const correctAnswer = question.correct_answer === answer;
             const questionStyle = correctAnswer ? greenBorder : redBorder;
@@ -39,7 +50,7 @@ class Answer extends Component {
               ? '1px solid blue' : questionStyle;
 
             return (
-              <button
+              <S.AnswerItem
                 type="button"
                 disabled={ isButtonsDisabled }
                 data-testid={ answerTestId }
@@ -48,11 +59,11 @@ class Answer extends Component {
                 onClick={ (event) => handleClick(event) }
               >
                 {answer}
-              </button>
+              </S.AnswerItem>
             );
           })}
-        </div>
-      </div>
+        </S.AnswerContainer>
+      </S.TimerContainer>
     );
   }
 }
