@@ -23,6 +23,7 @@ Button.defaultProps = {
   type: 'button',
   testId: 'btn-generic',
   isDisabled: false,
+  onClick: () => {},
 };
 
 Button.propTypes = {
@@ -30,7 +31,7 @@ Button.propTypes = {
   type: PropTypes.string,
   testId: PropTypes.string,
   isDisabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default Button;
