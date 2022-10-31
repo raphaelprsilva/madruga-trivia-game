@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 
 import Layout from '../../components/Layout';
 import Feedback from '../../components/Feedback/index';
+import Button from '../../components/Button';
+
 import { getItemFromLocalStorage, setItemToLocalStorage } from '../../utils/localStorage';
+
+import * as S from './styled';
 
 const CORRECTS_ANSWERS = 3;
 
@@ -70,35 +74,42 @@ class Feedbacks extends Component {
     const feedback = this.renderFeedback(assertions);
     return (
       <Layout>
-        <div data-testid="feedback-text">
-          <h1>Feedbacks</h1>
-        </div>
-        <div>
-          <div>Placar Final</div>
-          <div data-testid="feedback-total-score" title="user score">
-            {score}
+        <S.FeedbackContainer>
+          <S.FeedbackHeader data-testid="feedback-text">
+            <h1>Feedbacks</h1>
+          </S.FeedbackHeader>
+          <div>
+            <S.FeedbackItemContainer
+              data-testid="feedback-total-score"
+              title="user score"
+            >
+              <S.FeedbackItemElement>Final Score:</S.FeedbackItemElement>
+              <S.FeedbackItemElement>{score}</S.FeedbackItemElement>
+            </S.FeedbackItemContainer>
+            <S.FeedbackItemContainer
+              data-testid="feedback-total-question"
+              title="user assertions"
+            >
+              <S.FeedbackItemElement>Player Assertions:</S.FeedbackItemElement>
+              <S.FeedbackItemElement>{assertions}</S.FeedbackItemElement>
+            </S.FeedbackItemContainer>
           </div>
-          <div data-testid="feedback-total-question" title="user assertions">
-            {assertions}
+          <div>{feedback}</div>
+          <div>
+            <Button
+              type="button"
+              data-testid="btn-play-again"
+              onClick={ () => history.push('/') }
+              name="Play Again"
+            />
+            <Button
+              type="button"
+              data-testid="btn-ranking"
+              onClick={ () => this.redirectToRanking() }
+              name="Ranking"
+            />
           </div>
-        </div>
-        <div>{feedback}</div>
-        <div>
-          <button
-            type="button"
-            data-testid="btn-play-again"
-            onClick={ () => history.push('/') }
-          >
-            Play Again
-          </button>
-          <button
-            type="button"
-            data-testid="btn-ranking"
-            onClick={ () => this.redirectToRanking() }
-          >
-            Ranking
-          </button>
-        </div>
+        </S.FeedbackContainer>
       </Layout>
     );
   }
